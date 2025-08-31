@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HealthMate - SDG 3</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <nav>
+      <h1>HealthMate</h1>
+      <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#dashboard">Dashboard</a></li>
+        <li><a href="#tracker">Health Tracker</a></li>
+        <li><a href="#knowledge">Knowledge Hub</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#about">About SDG 3</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Hero Section -->
+  <section id="home" class="hero">
+    <h2>Good Health & Well-being for All</h2>
+    <p>Track your health, learn tips, and stay safe with HealthMate.</p>
+    <button onclick="scrollToSection('dashboard')">Get Started</button>
+  </section>
+
+  <!-- Dashboard -->
+  <section id="dashboard">
+    <h2>Your Dashboard</h2>
+    <div class="cards">
+      <div class="card">
+        <h3>Water Intake</h3>
+        <p id="waterProgress">0 glasses</p>
+      </div>
+      <div class="card">
+        <h3>Sleep Hours</h3>
+        <p id="sleepProgress">0 hrs</p>
+      </div>
+      <div class="card">
+        <h3>Steps</h3>
+        <p id="stepsProgress">0 steps</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Chatbot -->
+  <section id="chatbot">
+    <h2>Well-being Assistant</h2>
+    <div id="chatWindow"></div>
+    <input type="text" id="userInput" placeholder="Ask me something...">
+    <button onclick="sendMessage()">Send</button>
+  </section>
+
+  <script src="script.js"></script>
+
+   <!-- Knowledge Hub -->
+  <section id="knowledge">
+    <h2>Knowledge Hub</h2>
+    <input type="text" id="searchBar" placeholder="Search health topics..." onkeyup="searchArticles()"/>
+    <div id="articles" class="grid"></div>
+  </section>
+
+
+
+  <!-- Payment Section -->
+<section id="donate">
+  <h2>Support SDG 3</h2>
+  <p>Your donations help us improve health and well-being initiatives.</p>
+  <button id="payButton">Donate with Paystack</button>
+</section>
+
+<script src="https://js.paystack.co/v1/inline.js"></script>
+<script>
+  document.getElementById("payButton").onclick = function () {
+    let handler = PaystackPop.setup({
+      key: 'pk_test_xxxxxxxxxxxxxxxxxxxxx', // replace with your public key
+      email: 'donor@example.com',           // dynamically set user email
+      amount: 5000 * 100,                   // amount in kobo (5000 NGN here)
+      currency: "NGN",
+      ref: ''+Math.floor((Math.random() * 1000000000) + 1), // unique reference
+      callback: function(response){
+        // Send response.reference to backend for verification
+        fetch("http://localhost:5000/verify-payment", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ reference: response.reference })
+        })
+        .then(res => res.json())
+        .then(data => alert(data.message))
+        .catch(err => console.error(err));
+      },
+      onClose: function(){
+        alert('Payment window closed.');
+      }
+    });
+    handler.openIframe();
+  }
+</script>
+
+<!-- Services -->
+  <section id="services">
+    <h2>Emergency & Nearby Services</h2>
+    <div class="service-box">
+      <h3>Emergency Numbers</h3>
+      <ul>
+        <li>🚑 Ambulance: 999</li>
+        <li>🔥 Fire: 911</li>
+        <li>👮 Police: 112</li>
+      </ul>
+    </div>
+    <div class="service-box">
+      <h3>Nearest Hospitals</h3>
+      <iframe src="https://www.openstreetmap.org/export/embed.html?bbox=36.8219%2C-1.2921%2C36.8229%2C-1.2911&layer=mapnik" width="100%" height="250"></iframe>
+    </div>
+  </section>
+
+   <!-- About -->
+  <section id="about">
+    <h2>About SDG 3</h2>
+    <p>
+      SDG 3 aims to ensure healthy lives and promote well-being for all at all ages.
+      It focuses on reducing mortality, ending epidemics, improving mental health,
+      and strengthening healthcare systems globally.
+    </p>
+  </section>
+
+</body>
+</html>
+    <footer>
+        <p>&copy; 2024 HealthMate. All rights reserved.</p>
+    </footer>
